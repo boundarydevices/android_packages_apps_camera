@@ -103,6 +103,8 @@ public class VideoCamera extends ActivityBase
 
     private static final int SCREEN_DELAY = 2 * 60 * 1000;
 
+    private static final long DEFAULT_MAX_FILE_SIZE = ((long)(4*1024 - 50))*1024*1024;
+
     // The brightness settings used when it is set to automatic in the system.
     // The reason why it is set to 0.7 is just because 1.0 is too bright.
     private static final float DEFAULT_CAMERA_BRIGHTNESS = 0.7f;
@@ -866,7 +868,6 @@ public class VideoCamera extends ActivityBase
         mReceiver = new MyBroadcastReceiver();
         registerReceiver(mReceiver, intentFilter);
         mStorageSpace = Storage.getAvailableSpace();
-
         mHandler.postDelayed(new Runnable() {
             public void run() {
                 showStorageHint();
@@ -1190,6 +1191,9 @@ public class VideoCamera extends ActivityBase
                 }
             }
             requestedSizeLimit = myExtras.getLong(MediaStore.EXTRA_SIZE_LIMIT);
+        }
+        else{
+            requestedSizeLimit = DEFAULT_MAX_FILE_SIZE;
         }
         mMediaRecorder = new MediaRecorder();
 
