@@ -516,9 +516,10 @@ public class PanoramaActivity extends ActivityBase implements
          */
         // Frames might still be available after the activity is paused. If we call onFrameAvailable
         // after pausing, the GL thread will crash.
-        if (mPausing) return;
-
         // Updating the texture should be done in the GL thread which mMosaicView is attached.
+        if (mPausing || mSurfaceTexture == null){
+            return;
+        }
         mMosaicView.queueEvent(new Runnable() {
             @Override
             public void run() {
