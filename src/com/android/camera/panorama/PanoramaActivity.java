@@ -443,6 +443,7 @@ public class PanoramaActivity extends ActivityBase implements
         if (isFinishing()) {
             return false;
         }
+        mSurfaceTexture = null;
         MenuHelper.gotoMode(mode, this);
         finish();
         return true;
