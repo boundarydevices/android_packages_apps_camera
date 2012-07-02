@@ -72,8 +72,18 @@ public class ControlPanelLayout extends RelativeLayout {
         }
 
         if (isLandscape) {
+            int minWidth = getSuggestedMinimumWidth();
+            if (minWidth > measuredSize) {
+                measuredSize = minWidth;
+            }
+
             widthSpec = MeasureSpec.makeMeasureSpec(measuredSize, MeasureSpec.EXACTLY);
         } else {
+            int minHeight = getSuggestedMinimumHeight();
+            if (minHeight > measuredSize) {
+                measuredSize = minHeight;
+            }
+
             heightSpec = MeasureSpec.makeMeasureSpec(measuredSize, MeasureSpec.EXACTLY);
         }
 
