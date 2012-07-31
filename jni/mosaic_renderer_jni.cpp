@@ -499,6 +499,8 @@ JNIEXPORT jint JNICALL Java_com_android_camera_panorama_MosaicRenderer_init(
     // bind the surface texture
     bindSurfaceTexture(gSurfaceTextureID[0]);
 
+    gWarpImage = false;
+
     return (jint) gSurfaceTextureID[0];
 }
 
@@ -620,6 +622,8 @@ JNIEXPORT void JNICALL Java_com_android_camera_panorama_MosaicRenderer_reset(
     gPreview.SetScalingMatrix(gUILayoutScalingX, -1.0f * gUILayoutScalingY);
     gPreview.SetInputTextureName(gBuffer[gCurrentFBOIndex].GetTextureName());
     gPreview.SetInputTextureType(GL_TEXTURE_2D);
+
+    gWarpImage = false;
 }
 
 JNIEXPORT void JNICALL Java_com_android_camera_panorama_MosaicRenderer_preprocess(
