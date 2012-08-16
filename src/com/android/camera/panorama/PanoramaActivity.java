@@ -76,6 +76,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Activity to handle panorama capturing.
@@ -181,6 +182,8 @@ public class PanoramaActivity extends ActivityBase implements
     private RotateDialogController mRotateDialog;
 
     private CameraSound mCameraSound;
+
+    private ReentrantLock mTextureLock = new ReentrantLock();
 
     private class MosaicJpeg {
         public MosaicJpeg(byte[] data, int width, int height) {
@@ -443,7 +446,9 @@ public class PanoramaActivity extends ActivityBase implements
         if (isFinishing()) {
             return false;
         }
+        mTextureLock.lock();
         mSurfaceTexture = null;
+        mTextureLock.unlock();
         MenuHelper.gotoMode(mode, this);
         finish();
         return true;
@@ -526,8 +531,12 @@ public class PanoramaActivity extends ActivityBase implements
             public void run() {
                 // Check if the activity is paused here can speed up the onPause() process.
                 if (mPausing) return;
-                mSurfaceTexture.updateTexImage();
-                mSurfaceTexture.getTransformMatrix(mTransformMatrix);
+                mTextureLock.lock();
+                if (mSurfaceTexture != null){
+                        mSurfaceTexture.updateTexImage();
+                        mSurfaceTexture.getTransformMatrix(mTransformMatrix);
+                }
+                mTextureLock.unlock();
             }
         });
         // Update the transformation matrix for mosaic pre-process.
