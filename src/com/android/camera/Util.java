@@ -619,13 +619,14 @@ public class Util {
         // See android.hardware.Camera.Parameters.setRotation for
         // documentation.
         int rotation = 0;
-        if (orientation != OrientationEventListener.ORIENTATION_UNKNOWN) {
-            CameraInfo info = CameraHolder.instance().getCameraInfo()[cameraId];
-            if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
-                rotation = (info.orientation - orientation + 360) % 360;
-            } else {  // back-facing camera
-                rotation = (info.orientation + orientation) % 360;
-            }
+        //Init the rotation to 0 if device is put flatly
+        if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN)
+            orientation = 0;
+        CameraInfo info = CameraHolder.instance().getCameraInfo()[cameraId];
+        if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+            rotation = (info.orientation - orientation + 360) % 360;
+        } else {  // back-facing camera
+            rotation = (info.orientation + orientation) % 360;
         }
         parameters.setRotation(rotation);
     }
